@@ -35,7 +35,8 @@ defmodule Trebuchet do
   end
 
   defp get_all_digits(string) do
-    Enum.reduce(@numbers, string, fn digit, acc ->
+    @numbers
+    |> Enum.reduce(string, fn digit, acc ->
       String.replace(acc, digit, &get_digit_word/1, global: true)
     end)
     |> String.split("")
