@@ -1,4 +1,6 @@
 defmodule CubeConundrum do
+  defguard color_max(red, green, blue) when red <= 12 and green <= 13 and blue <= 14
+
   def problem_one do
     Aoc23.read_lines("lib/day2/input.txt")
     |> Enum.reduce(0, fn line, acc ->
@@ -6,18 +8,13 @@ defmodule CubeConundrum do
       [_, num] = String.split(game_num, " ")
 
       String.split(rounds, [";", ", "])
-      |> Enum.all?(fn color ->
+      |> Enum.reduce(%{red: 0, green: 0, blue: 0}, fn color, acc ->
         [freq, name] = String.split(color, " ", trim: true)
-
-        case name do
-          "red" -> String.to_integer(freq) <= 12
-          "green" -> String.to_integer(freq) <= 13
-          "blue" -> String.to_integer(freq) <= 14
-        end
+        Map.update!(acc, String.to_atom(name), fn i -> max(String.to_integer(freq), i) end)
       end)
       |> case do
-        true -> String.to_integer(num) + acc
-        false -> acc
+        %{red: r, green: g, blue: b} when color_max(r, g, b) -> String.to_integer(num) + acc
+        _ -> acc
       end
     end)
   end
@@ -31,13 +28,7 @@ defmodule CubeConundrum do
         String.split(rounds, [";", ", "])
         |> Enum.reduce(%{red: 0, green: 0, blue: 0}, fn color, acc ->
           [freq, name] = String.split(color, " ", trim: true)
-          freq = String.to_integer(freq)
-
-          case name do
-            "red" -> Map.update!(acc, :red, fn i -> max(freq, i) end)
-            "green" -> Map.update!(acc, :green, fn i -> max(freq, i) end)
-            "blue" -> Map.update!(acc, :blue, fn i -> max(freq, i) end)
-          end
+          Map.update!(acc, String.to_atom(name), fn i -> max(String.to_integer(freq), i) end)
         end)
 
       red * blue * green + total
