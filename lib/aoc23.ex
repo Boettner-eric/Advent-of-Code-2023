@@ -15,4 +15,11 @@ defmodule Aoc23 do
   def hello do
     :world
   end
+
+  def read_lines(filename) do
+    {:ok, input} = File.read(filename)
+
+    input
+    |> String.split("\n")
+  end
 end

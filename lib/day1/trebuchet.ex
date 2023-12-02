@@ -2,10 +2,7 @@ defmodule Trebuchet do
   @numbers ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
 
   def problem_one do
-    {:ok, input} = File.read("lib/day1/input.txt")
-
-    input
-    |> String.split("\n")
+    Aoc23.read_lines("lib/day1/input.txt")
     |> Enum.reduce(0, fn x, acc ->
       digits = get_digits(x)
       ((List.first(digits) <> List.last(digits)) |> String.to_integer()) + acc
@@ -24,10 +21,7 @@ defmodule Trebuchet do
   end
 
   def problem_two do
-    {:ok, input} = File.read("lib/day1/input.txt")
-
-    input
-    |> String.split("\n")
+    Aoc23.read_lines("lib/day1/input.txt")
     |> Enum.reduce(0, fn x, acc ->
       digits = get_all_digits(x)
       ((List.first(digits) <> List.last(digits)) |> String.to_integer()) + acc

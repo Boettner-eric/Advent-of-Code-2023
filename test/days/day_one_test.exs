@@ -1,11 +1,11 @@
 defmodule DayOneTest do
   use ExUnit.Case
 
-  test "gets correct answer for problem one" do
+  test "day one, gets correct answer for problem one" do
     assert Trebuchet.problem_one() == 55816
   end
 
-  test "gets correct answer for problem two" do
+  test "day one, gets correct answer for problem two" do
     assert Trebuchet.problem_two() == 54980
   end
 end
