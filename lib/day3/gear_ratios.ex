@@ -5,31 +5,18 @@ defmodule GearRatios do
       Aoc23.read_lines(filename)
       |> Enum.map(fn line -> String.split(line, "") end)
 
-    Enum.reduce(Enum.with_index(lines), 0, fn {line, i}, acc ->
-      Enum.reduce(Enum.with_index(line), 0, fn {char, j}, sum ->
+    for {line, i} <- Enum.with_index(lines),
+        {char, j} <- Enum.with_index(line),
+        reduce: 0 do
+      acc ->
         if char in @symbols do
-          {_, new_points} =
-            get_points(lines, i, j)
-            |> Enum.reduce({[], []}, fn point, {vs, digits} ->
-              case get_numbers(lines, point, {vs, 0}) do
-                {k, l} when l != 0 -> {vs ++ k, digits ++ [l]}
-                {k, _} -> {vs ++ k, digits}
-              end
-            end)
-
-          Enum.sum(new_points) + sum
+          get_adjacent_numbers(lines, i, j)
+          |> Enum.reduce({[], []}, &to_numbers(lines, &1, &2))
+          |> elem(1)
+          |> Enum.sum()
         else
-          sum
-        end
-      end) + acc
-    end)
-  end
-
-  def get_numbers(arr, point, {points, acc}) do
-    expand_num(arr, point, points)
-    |> case do
-      {visited, val} when val != "" -> {visited, get_int(val) + acc}
-      {visited, _val} -> {visited, acc}
+          0
+        end + acc
     end
   end
 
@@ -54,15 +41,21 @@ defmodule GearRatios do
     end
   end
 
-  def get_points(arr, x, y) do
-    for i <- (x - 1)..(x + 1),
-        j <- (y - 1)..(y + 1) do
-      case get_int(Enum.at(Enum.at(arr, i, []), j, "")) do
-        nil -> nil
-        _ -> {i, j}
-      end
+  def to_numbers(lines, gear, {vs, digits}) do
+    case expand_num(lines, gear, vs) do
+      {visited, val} when val != "" -> {vs ++ visited, digits ++ [get_int(val)]}
+      {visited, _val} -> {visited, digits}
     end
-    |> Enum.reject(&is_nil/1)
+  end
+
+  def get_adjacent_numbers(arr, x, y) do
+    for i <- (x - 1)..(x + 1), j <- (y - 1)..(y + 1), reduce: [] do
+      acc ->
+        case get_int(Enum.at(Enum.at(arr, i, []), j, "")) do
+          nil -> acc
+          _ -> [{i, j} | acc]
+        end
+    end
   end
 
   def get_int(item) do
@@ -77,16 +70,13 @@ defmodule GearRatios do
       Aoc23.read_lines(filename)
       |> Enum.map(fn line -> String.split(line, "") end)
 
-    Enum.reduce(Enum.with_index(lines), 0, fn {line, i}, acc ->
-      Enum.reduce(Enum.with_index(line), {0, []}, fn {char, j}, {acc, visited} ->
+    for {line, i} <- Enum.with_index(lines),
+        {char, j} <- Enum.with_index(line),
+        reduce: {0, []} do
+      {acc, visited} ->
         if char == "*" do
-          get_points(lines, i, j)
-          |> Enum.reduce({visited, []}, fn gear, {vs, digits} ->
-            case get_numbers(lines, gear, {vs, 0}) do
-              {k, l} when l != 0 -> {vs ++ k, digits ++ [l]}
-              {k, _} -> {vs ++ k, digits}
-            end
-          end)
+          get_adjacent_numbers(lines, i, j)
+          |> Enum.reduce({visited, []}, &to_numbers(lines, &1, &2))
           |> case do
             {_, [a, b]} -> {a * b + acc, visited}
             _ -> {acc, visited}
@@ -94,8 +84,7 @@ defmodule GearRatios do
         else
           {acc, visited}
         end
-      end)
-      |> then(&(elem(&1, 0) + acc))
-    end)
+    end
+    |> elem(0)
   end
 end
