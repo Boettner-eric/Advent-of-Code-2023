@@ -65,19 +65,18 @@ defmodule GearRatios do
 
     for {line, i} <- Enum.with_index(lines),
         {char, j} <- Enum.with_index(line),
-        reduce: {0, []} do
-      {acc, visited} ->
+        reduce: 0 do
+      acc ->
         if char == "*" do
           get_adjacent_numbers(lines, i, j)
-          |> Enum.reduce({visited, "", []}, &expand_num(lines, &1, &2))
+          |> Enum.reduce({[], "", []}, &expand_num(lines, &1, &2))
           |> case do
-            {_, _, [a, b]} -> {a * b + acc, visited}
-            _ -> {acc, visited}
+            {_, _, [a, b]} -> a * b
+            _ -> 0
           end
         else
-          {acc, visited}
-        end
+          0
+        end + acc
     end
-    |> elem(0)
   end
 end
