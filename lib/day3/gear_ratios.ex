@@ -11,8 +11,8 @@ defmodule GearRatios do
       acc ->
         if char in @symbols do
           get_adjacent_numbers(lines, i, j)
-          |> Enum.reduce({[], []}, &to_numbers(lines, &1, &2))
-          |> elem(1)
+          |> Enum.reduce({[], "", []}, &expand_num(lines, &1, &2))
+          |> elem(2)
           |> Enum.sum()
         else
           0
@@ -20,31 +20,24 @@ defmodule GearRatios do
     end
   end
 
-  def expand_num(arr, {x, y}, points) do
+  def expand_num(arr, {x, y}, {points, _, numbers}) do
     if {x, y} in points do
-      {points, ""}
+      {points, "", numbers}
     else
       val = Enum.at(Enum.at(arr, x, []), y, "")
 
       case get_int(val) do
         nil ->
-          {points, ""}
+          {points, "", numbers}
 
         _ ->
           points = points ++ [{x, y}]
 
-          {points, left} = expand_num(arr, {x, y - 1}, points)
-          {points, right} = expand_num(arr, {x, y + 1}, points)
+          {points, left, _} = expand_num(arr, {x, y - 1}, {points, "", numbers})
+          {points, right, _} = expand_num(arr, {x, y + 1}, {points, "", numbers})
 
-          {points, left <> val <> right}
+          {points, left <> val <> right, [get_int(left <> val <> right) | numbers]}
       end
-    end
-  end
-
-  def to_numbers(lines, gear, {vs, digits}) do
-    case expand_num(lines, gear, vs) do
-      {visited, val} when val != "" -> {vs ++ visited, digits ++ [get_int(val)]}
-      {visited, _val} -> {visited, digits}
     end
   end
 
@@ -76,9 +69,9 @@ defmodule GearRatios do
       {acc, visited} ->
         if char == "*" do
           get_adjacent_numbers(lines, i, j)
-          |> Enum.reduce({visited, []}, &to_numbers(lines, &1, &2))
+          |> Enum.reduce({visited, "", []}, &expand_num(lines, &1, &2))
           |> case do
-            {_, [a, b]} -> {a * b + acc, visited}
+            {_, _, [a, b]} -> {a * b + acc, visited}
             _ -> {acc, visited}
           end
         else
