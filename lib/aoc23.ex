@@ -22,4 +22,10 @@ defmodule Aoc23 do
     input
     |> String.split("\n")
   end
+
+  def read_blob(filename) do
+    {:ok, input} = File.read(filename)
+
+    input
+  end
 end
