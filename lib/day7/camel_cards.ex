@@ -2,22 +2,18 @@ defmodule CamelCards do
   @card_rank ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
   def problem_one(filename \\ "lib/day7/input.txt") do
     Aoc23.read_lines(filename)
-    |> Enum.map(fn hand ->
-      [hand, bid] = String.split(hand, " ", trim: true)
-      hand = String.split(hand, "", trim: true)
-      {hand, bid, rank_hand(hand)}
-    end)
-    |> Enum.sort(fn {hand_a, _, rank_a}, {hand_b, _, rank_b} ->
-      cond do
-        rank_a < rank_b -> true
-        rank_a == rank_b -> break_tie(hand_a, hand_b)
-        true -> false
-      end
-    end)
+    |> Enum.map(&parse_hand/1)
+    |> Enum.sort(&compare_hands/2)
     |> Enum.with_index()
     |> Enum.reduce(0, fn {{_, bid, _}, i}, acc ->
-      (i + 1) * String.to_integer(bid) + acc
+      (i + 1) * bid + acc
     end)
+  end
+
+  def parse_hand(hand, joker \\ false) do
+    [hand, bid] = String.split(hand, " ", trim: true)
+    hand = String.split(hand, "", trim: true)
+    {hand, String.to_integer(bid), rank_hand(hand, joker)}
   end
 
   def rank_hand(hand, joker \\ false) do
@@ -60,7 +56,15 @@ defmodule CamelCards do
     list
   end
 
-  def break_tie([a | ra], [b | rb], joker \\ false) do
+  def compare_hands({hand_a, _, rank_a}, {hand_b, _, rank_b}, joker \\ false) do
+    cond do
+      rank_a < rank_b -> true
+      rank_a == rank_b -> break_tie(hand_a, hand_b, joker)
+      true -> false
+    end
+  end
+
+  def break_tie([a | ra], [b | rb], joker) do
     cond do
       a == b -> break_tie(ra, rb, joker)
       get_card_rank(a, joker) < get_card_rank(b, joker) -> false
@@ -78,18 +82,8 @@ defmodule CamelCards do
 
   def problem_two(filename \\ "lib/day7/input.txt") do
     Aoc23.read_lines(filename)
-    |> Enum.map(fn hand ->
-      [hand, bid] = String.split(hand, " ", trim: true)
-      hand = String.split(hand, "", trim: true)
-      {hand, String.to_integer(bid), rank_hand(hand, true)}
-    end)
-    |> Enum.sort(fn {hand_a, _, rank_a}, {hand_b, _, rank_b} ->
-      cond do
-        rank_a < rank_b -> true
-        rank_a == rank_b -> break_tie(hand_a, hand_b, true)
-        true -> false
-      end
-    end)
+    |> Enum.map(&parse_hand(&1, true))
+    |> Enum.sort(&compare_hands(&1, &2, true))
     |> Enum.with_index()
     |> Enum.reduce(0, fn {{_, bid, _}, i}, acc ->
       (i + 1) * bid + acc
