@@ -25,9 +25,10 @@ DayFourTest [test/days/day_four_test.exs]
   * test day four, gets correct answer for sample problem two (0.06ms) [L#16]
 
 DayFiveTest [test/days/day_five_test.exs]
-  * test day five, gets correct answer for sample problem two (0.7ms) [L#17]
-  * test day five, gets correct answer for sample problem one (0.07ms) [L#8]
+  * test day five, gets correct answer for sample problem one (0.7ms) [L#8]
   * test day five, gets correct answer for problem one (0.6ms) [L#4]
+  * test day five, gets correct answer for sample problem two (0.08ms) [L#16]
+  * test day five, gets correct answer for problem two (1.0ms) [L#12]
 
 DaySixTest [test/days/day_six_test.exs]
   * test day six, gets correct answer for problem two (333.3ms) [L#12]
@@ -42,5 +43,5 @@ DaySevenTest [test/days/day_seven_test.exs]
   * test day seven, gets correct answer for problem one (5.4ms) [L#4]
 
 Finished in 0.4 seconds (0.00s async, 0.4s sync)
-1 doctest, 24 tests, 0 failures
+1 doctest, 25 tests, 0 failures
 ```

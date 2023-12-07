@@ -35,7 +35,7 @@ defmodule Gondola do
       |> add_copies(copies, index + 1)
     end)
     |> Map.to_list()
-    |> Enum.reduce(0, fn {_, val}, total -> total + val end)
+    |> Enum.reduce(0, &(elem(&1, 1) + &2))
   end
 
   def add_copies(range, map, current) do

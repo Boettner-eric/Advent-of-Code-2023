@@ -10,7 +10,7 @@ defmodule CubeConundrum do
       String.split(rounds, [";", ", "])
       |> Enum.reduce(%{red: 0, green: 0, blue: 0}, fn color, acc ->
         [freq, name] = String.split(color, " ", trim: true)
-        Map.update!(acc, String.to_atom(name), fn i -> max(String.to_integer(freq), i) end)
+        Map.update!(acc, String.to_atom(name), &max(String.to_integer(freq), &1))
       end)
       |> case do
         %{red: r, green: g, blue: b} when color_max(r, g, b) -> String.to_integer(num) + acc
@@ -28,7 +28,7 @@ defmodule CubeConundrum do
         String.split(rounds, [";", ", "])
         |> Enum.reduce(%{red: 0, green: 0, blue: 0}, fn color, acc ->
           [freq, name] = String.split(color, " ", trim: true)
-          Map.update!(acc, String.to_atom(name), fn i -> max(String.to_integer(freq), i) end)
+          Map.update!(acc, String.to_atom(name), &max(String.to_integer(freq), &1))
         end)
 
       red * blue * green + total

@@ -69,6 +69,7 @@ defmodule CamelCards do
       a == b -> break_tie(ra, rb, joker)
       get_card_rank(a, joker) < get_card_rank(b, joker) -> false
       get_card_rank(a, joker) > get_card_rank(b, joker) -> true
+      true -> false
     end
   end
 

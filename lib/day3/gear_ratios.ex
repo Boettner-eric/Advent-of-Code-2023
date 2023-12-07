@@ -14,9 +14,10 @@ defmodule GearRatios do
           |> Enum.reduce({[], "", []}, &expand_num(lines, &1, &2))
           |> elem(2)
           |> Enum.sum()
+          |> Kernel.+(acc)
         else
-          0
-        end + acc
+          acc
+        end
     end
   end
 
@@ -74,9 +75,10 @@ defmodule GearRatios do
             {_, _, [a, b]} -> a * b
             _ -> 0
           end
+          |> Kernel.+(acc)
         else
-          0
-        end + acc
+          acc
+        end
     end
   end
 end
