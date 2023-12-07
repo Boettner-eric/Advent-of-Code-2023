@@ -6,7 +6,7 @@ defmodule Racing do
 
     {a, b} = Enum.split(races, div(length(races), 2))
 
-    Enum.zip_with(a, b, fn l, r -> {String.to_integer(l), String.to_integer(r)} end)
+    Enum.zip_with(a, b, &{String.to_integer(&1), String.to_integer(&2)})
     |> Enum.reduce(1, fn race, acc ->
       (1 + get_bound(race, :upper) - get_bound(race, :lower)) * acc
     end)
@@ -29,8 +29,8 @@ defmodule Racing do
     {a, b} =
       Enum.split(races, div(length(races), 2))
 
-    a = String.to_integer(Enum.reduce(a, "", fn i, acc -> acc <> i end))
-    b = String.to_integer(Enum.reduce(b, "", fn i, acc -> acc <> i end))
+    a = String.to_integer(Enum.join(a))
+    b = String.to_integer(Enum.join(b))
 
     1 + get_bound({a, b}, :upper) - get_bound({a, b}, :lower)
   end
