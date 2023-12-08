@@ -16,19 +16,14 @@ defmodule Fertilizer do
     [_ | arr] = String.split(blob, [":", "\n"], trim: true)
 
     Enum.reduce(arr, %{}, fn data, map ->
-      with [dst, src, rng] <- String.split(data, " ", trim: true),
-           src <- String.to_integer(src),
-           rng <- String.to_integer(rng),
-           dst <- String.to_integer(dst) do
-        Map.put(map, src..(src + rng - 1), dst - src)
-      end
+      [dst, src, rng] = String.split(data, " ", trim: true) |> Enum.map(&String.to_integer/1)
+      Map.put(map, src..(src + rng - 1), dst - src)
     end)
   end
 
   def lookup_values(map, values) do
     Enum.map(values, fn value ->
-      map
-      |> Map.keys()
+      Map.keys(map)
       |> Enum.filter(&Kernel.in(value, &1))
       |> case do
         [el] -> map[el] + value
@@ -103,7 +98,7 @@ defmodule Fertilizer do
       k > i and k < j and l < j -> k..l
       k > i and k < j and l > k -> k..j
       k < i and l > i and l < j -> i..l
-      k < i and l > i and l > j -> i..j
+      k <= i and l >= i and l >= j -> i..j
       true -> nil
     end
   end

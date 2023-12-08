@@ -32,11 +32,8 @@ defmodule GearRatios do
           {points, "", numbers}
 
         _ ->
-          points = points ++ [{x, y}]
-
-          {points, left, _} = expand_num(arr, {x, y - 1}, {points, "", numbers})
+          {points, left, _} = expand_num(arr, {x, y - 1}, {points ++ [{x, y}], "", numbers})
           {points, right, _} = expand_num(arr, {x, y + 1}, {points, "", numbers})
-
           {points, left <> val <> right, [get_int(left <> val <> right) | numbers]}
       end
     end
