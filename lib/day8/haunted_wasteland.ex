@@ -1,17 +1,12 @@
 defmodule HauntedWasteland do
   def problem_one(filename \\ "lib/day8/input.txt") do
-    [pattern, mappings] = Aoc23.read_blob(filename) |> String.split("\n\n")
+    [pattern | mappings] = Aoc23.read_blob(filename) |> String.split(["\n\n", "\n"])
 
-    pattern = String.split(pattern, "", trim: true)
-
-    map =
-      String.split(mappings, "\n")
-      |> Enum.reduce(%{}, fn map, acc ->
-        [key, l, r] = String.split(map, ["=", "(", ",", ")", " "], trim: true)
-        Map.put(acc, key, {l, r})
-      end)
-
-    lookup(map, "AAA", pattern, 0)
+    Enum.reduce(mappings, %{}, fn mapping, acc ->
+      [key, l, r] = String.split(mapping, ["=", "(", ",", ")", " "], trim: true)
+      Map.put(acc, key, {l, r})
+    end)
+    |> lookup("AAA", String.split(pattern, "", trim: true), 0)
   end
 
   def lookup(map, key, pattern, steps) do
@@ -25,20 +20,19 @@ defmodule HauntedWasteland do
   end
 
   def problem_two(filename \\ "lib/day8/input.txt") do
-    [pattern, mappings] = Aoc23.read_blob(filename) |> String.split("\n\n")
+    [pattern | mappings] = Aoc23.read_blob(filename) |> String.split(["\n\n", "\n"])
 
     pattern = String.split(pattern, "", trim: true)
 
     map =
-      String.split(mappings, "\n")
-      |> Enum.reduce(%{}, fn map, acc ->
-        [key, l, r] = String.split(map, ["=", "(", ",", ")", " "], trim: true)
+      Enum.reduce(mappings, %{}, fn mapping, acc ->
+        [key, l, r] = String.split(mapping, ["=", "(", ",", ")", " "], trim: true)
         Map.put(acc, key, {l, r})
       end)
 
-    Enum.reduce(Map.keys(map), 1, fn i, acc ->
-      if String.at(i, -1) == "A" do
-        lookup_two(map, i, pattern, 0) |> lcm(acc)
+    Enum.reduce(Map.keys(map), 1, fn key, acc ->
+      if String.at(key, -1) == "A" do
+        lookup_two(map, key, pattern, 0) |> lcm(acc)
       else
         acc
       end
