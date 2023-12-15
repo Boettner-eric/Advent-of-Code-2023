@@ -1,8 +1,8 @@
 defmodule Mix.Tasks.Day.Gen do
   @moduledoc """
-  Usage: mix day gen <number> <name>
+  Usage: mix day.gen <number> <problem name>
   """
-  @shortdoc "generates all the files needed for aoc"
+  @shortdoc "Generates all the files needed for an aoc day"
 
   use Mix.Task
 
@@ -46,20 +46,20 @@ end}
     ~s{defmodule #{test_module_name}Test do
   use ExUnit.Case
 
-  test "day #{day_name}, gets correct answer for problem one" do
-    assert #{module_name}.problem_one() == nil
-  end
-
   test "day #{day_name}, gets correct answer for sample one" do
     assert #{module_name}.problem_one("lib/day#{day}/sample.txt") == nil
   end
 
-  test "day #{day_name}, gets correct answer for problem two" do
-    assert #{module_name}.problem_two("lib/day#{day}/input.txt") == nil
+  test "day #{day_name}, gets correct answer for problem one" do
+    assert #{module_name}.problem_one() == nil
   end
 
   test "day #{day_name}, gets correct answer for sample two" do
     assert #{module_name}.problem_two("lib/day#{day}/sample.txt") == nil
+  end
+
+  test "day #{day_name}, gets correct answer for problem two" do
+    assert #{module_name}.problem_two() == nil
   end
 end}
   end
