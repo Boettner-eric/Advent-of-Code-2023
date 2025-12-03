@@ -1,3 +1,4 @@
 %{
   "memoize": {:hex, :memoize, "1.4.2", "cc289c7f1b86a37e7278180aa382bdc8935e8280cbf41659482d29d843bcd16d", [:mix], [], "hexpm", "daabbbf763b07bc2a2aedba6c87945cbc3d9100e46cfa651923a81e098adbcfa"},
+  "priority_queue": {:hex, :priority_queue, "1.1.0", "78827c8b3a3ef42f6fa9ae871938697562ec225e614c3be1b61b179cb56f01f5", [:mix], [], "hexpm", "2d07500bc4918223d1ccc8af1a4d18dc025a968df3a27cd14a767b201c848739"},
 }
