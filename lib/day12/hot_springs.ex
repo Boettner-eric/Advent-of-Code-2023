@@ -13,7 +13,7 @@ defmodule HotSprings do
 
   def add_arrangements(line, acc, copies \\ 1) do
     [springs, groups] = String.split(line, " ", trim: true)
-    springs = String.duplicate(springs <> "?", copies) |> String.slice(-0..-2)
+    springs = String.duplicate(springs <> "?", copies) |> String.slice(-0..-2//1)
 
     groups =
       String.duplicate(groups <> ",", copies)

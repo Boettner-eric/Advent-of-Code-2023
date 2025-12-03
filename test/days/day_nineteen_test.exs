@@ -9,11 +9,11 @@ defmodule NineteenTest do
     assert Aplenty.problem_one() == 391_132
   end
 
-  # test "day nineteen, gets correct answer for sample two" do
-  #   assert Aplenty.problem_two("lib/day19/sample.txt") == 167_409_079_868_000
-  # end
+  test "day nineteen, gets correct answer for sample two" do
+    assert Aplenty.problem_two("lib/day19/sample.txt") == 167_409_079_868_000
+  end
 
-  # test "day nineteen, gets correct answer for problem two" do
-  #   assert Aplenty.problem_two() == nil
-  # end
+  test "day nineteen, gets correct answer for problem two" do
+    assert Aplenty.problem_two() == 128_163_929_109_524
+  end
 end

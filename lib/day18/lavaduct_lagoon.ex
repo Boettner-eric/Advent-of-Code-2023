@@ -43,7 +43,7 @@ defmodule LavaductLagoon do
     |> Enum.map(&String.split(&1, " ", trim: true))
     |> Enum.reduce({[], 0}, fn [_, _, color], {acc, l} ->
       {x, y} = Enum.at(acc, -1, {0, 0})
-      len = String.to_integer(String.slice(color, 2..-3), 16)
+      len = String.to_integer(String.slice(color, 2..-3//1), 16)
 
       {acc ++
          case String.at(color, -2) do

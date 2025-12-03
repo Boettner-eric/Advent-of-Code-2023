@@ -37,7 +37,7 @@ defmodule CosmicExpansion do
       end)
 
     Enum.reduce(0..(length(points) - 1), 0, fn index, acc ->
-      Enum.slice(points, (index + 1)..(length(points) - 1))
+      Enum.slice(points, (index + 1)..(length(points) - 1)//1)
       |> Enum.reduce(0, &(shortest_path(&1, Enum.at(points, index)) + &2))
       |> Kernel.+(acc)
     end)
