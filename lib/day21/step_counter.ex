@@ -5,7 +5,6 @@ defmodule StepCounter do
     Aoc23.read_lines(filename)
     |> parse_garden()
     |> count_steps(goal)
-    |> MapSet.size()
   end
 
   def problem_two(goal, filename \\ "lib/day21/input.txt") do
@@ -14,9 +13,9 @@ defmodule StepCounter do
     size = length(garden)
     edge = div(size, 2)
 
-    a = count_steps({garden, start}, edge) |> MapSet.size()
-    b = count_steps({garden, start}, edge + 1 * size) |> MapSet.size()
-    c = count_steps({garden, start}, edge + 2 * size) |> MapSet.size()
+    a = count_steps({garden, start}, edge)
+    b = count_steps({garden, start}, edge + 1 * size)
+    c = count_steps({garden, start}, edge + 2 * size)
     quadratic([a, b, c], div(goal - edge, size))
   end
 
@@ -42,7 +41,7 @@ defmodule StepCounter do
 
   def count_steps({garden, start}, goal) do
     queue = PriorityQueue.new() |> PriorityQueue.put(0, start)
-    step(garden, queue, MapSet.new(), MapSet.new(), goal)
+    step(garden, queue, MapSet.new(), MapSet.new(), goal) |> MapSet.size()
   end
 
   def step(_garden, %PriorityQueue{size: 0}, plots, _visited, _goal), do: plots
