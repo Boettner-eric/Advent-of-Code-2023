@@ -77,7 +77,7 @@ defmodule Fertilizer do
       |> Enum.reduce([], fn key, ranges ->
         case get_intersections(key, value) do
           nil -> ranges
-          i..j -> [(map[key] + i)..(map[key] + j) | ranges]
+          i..j//_ -> [(map[key] + i)..(map[key] + j) | ranges]
         end
       end)
       |> case do
@@ -93,7 +93,7 @@ defmodule Fertilizer do
 
   # (update) i had to use pen and paper here, it might still be off
   # but it works for the sample and input so ill call it a day
-  def get_intersections(i..j, k..l) do
+  def get_intersections(i..j//_, k..l//_) do
     cond do
       k > i and k < j and l < j -> k..l
       k > i and k < j and l > k -> k..j
