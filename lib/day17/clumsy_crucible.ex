@@ -2,14 +2,14 @@ defmodule ClumsyCrucible do
   @infinity 100_000_000_000
   def problem_one(filename \\ "lib/day17/input.txt") do
     grid = Aoc23.read_lines(filename) |> Enum.map(&String.split(&1, "", trim: true))
-    queue = PriorityQueue.new() |> PriorityQueue.put({{{0, 0}, nil, 0}, 0})
+    queue = PriorityQueue.new() |> PriorityQueue.put(0, {{0, 0}, nil, 0})
 
     djikstra({queue, %{}}, grid, &crucible/2)
   end
 
   def problem_two(filename \\ "lib/day17/input.txt") do
     grid = Aoc23.read_lines(filename) |> Enum.map(&String.split(&1, "", trim: true))
-    queue = PriorityQueue.new() |> PriorityQueue.put({{{0, 0}, nil, 0}, 0})
+    queue = PriorityQueue.new() |> PriorityQueue.put(0, {{0, 0}, nil, 0})
 
     djikstra({queue, %{}}, grid, &ultra_crucible/2)
   end
@@ -24,13 +24,13 @@ defmodule ClumsyCrucible do
   end
 
   def djikstra({unvisited, costs}, grid, search_fn) do
-    {{current, cost}, queue} = PriorityQueue.pop(unvisited)
+    {{cost, current}, queue} = PriorityQueue.pop(unvisited)
 
     Enum.reduce(search_fn.(grid, current), {queue, costs}, fn neighbor, {q, c} ->
       new_cost = lookup_cost(grid, neighbor) + cost
 
       if new_cost < Map.get(costs, neighbor, @infinity) do
-        {PriorityQueue.put(q, neighbor, new_cost), Map.put(c, neighbor, new_cost)}
+        {PriorityQueue.put(q, new_cost, neighbor), Map.put(c, neighbor, new_cost)}
       else
         {q, c}
       end
